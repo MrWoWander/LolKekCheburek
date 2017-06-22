@@ -1,0 +1,9 @@
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\bin\Debug\SPO_LAB.exe.config
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\bin\Debug\SPO_LAB.exe
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\bin\Debug\SPO_LAB.pdb
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\obj\Debug\SPO.csprojResolveAssemblyReference.cache
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.MagicBuild.resources
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\obj\Debug\SPO_LAB.Properties.Resources.resources
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\obj\Debug\SPO.csproj.GenerateResource.Cache
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\obj\Debug\SPO_LAB.exe
+D:\Users\wowiv\Desktop\SPO\LolKekCheburek\WindowsFormsApplication1\obj\Debug\SPO_LAB.pdb

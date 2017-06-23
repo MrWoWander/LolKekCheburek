@@ -382,12 +382,12 @@ namespace WindowsFormsApplication1
         private void Click(object sender, EventArgs e)
         {
 
-            Tokensun tokenezator = new Tokensun();
+            Tokensun tokensun = new Tokensun();
             Lexer lexer = new Lexer();
             Tokens.Text = "";
             Output.Text = "";
             Perdole.Text = "";
-            List <Token> tks = tokenezator.getTokens(ProgrammText.Text);
+            List <Token> tks = tokensun.getTokens(ProgrammText.Text);
 
             foreach (Token t in tks){
                 Tokens.Text += t.Name + ", ";

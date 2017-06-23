@@ -31,7 +31,7 @@
             this.Letuchka = new System.Windows.Forms.Button();
             this.ProgrammText = new System.Windows.Forms.TextBox();
             this.Tokens = new System.Windows.Forms.TextBox();
-            this.Kurva_perdole = new System.Windows.Forms.TextBox();
+            this.Perdole = new System.Windows.Forms.TextBox();
             this.Output = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -43,7 +43,7 @@
             this.Letuchka.TabIndex = 0;
             this.Letuchka.Text = "Щелк!";
             this.Letuchka.UseVisualStyleBackColor = true;
-            this.Letuchka.Click += new System.EventHandler(this.Ckick);
+            this.Letuchka.Click += new System.EventHandler(this.Click);
             // 
             // ProgrammText
             // 
@@ -59,12 +59,12 @@
             this.Tokens.Size = new System.Drawing.Size(225, 20);
             this.Tokens.TabIndex = 2;
             // 
-            // Kurva_perdole
+            // Perdole
             // 
-            this.Kurva_perdole.Location = new System.Drawing.Point(305, 27);
-            this.Kurva_perdole.Name = "Kurva_perdole";
-            this.Kurva_perdole.Size = new System.Drawing.Size(225, 20);
-            this.Kurva_perdole.TabIndex = 3;
+            this.Perdole.Location = new System.Drawing.Point(305, 27);
+            this.Perdole.Name = "Perdole";
+            this.Perdole.Size = new System.Drawing.Size(225, 20);
+            this.Perdole.TabIndex = 3;
             // 
             // Output
             // 
@@ -79,7 +79,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(553, 186);
             this.Controls.Add(this.Output);
-            this.Controls.Add(this.Kurva_perdole);
+            this.Controls.Add(this.Perdole);
             this.Controls.Add(this.Tokens);
             this.Controls.Add(this.ProgrammText);
             this.Controls.Add(this.Letuchka);
@@ -96,7 +96,7 @@
         private System.Windows.Forms.Button Letuchka;
         private System.Windows.Forms.TextBox ProgrammText;
         private System.Windows.Forms.TextBox Tokens;
-        private System.Windows.Forms.TextBox Kurva_perdole;
+        private System.Windows.Forms.TextBox Perdole;
         private System.Windows.Forms.TextBox Output;
     }
 }

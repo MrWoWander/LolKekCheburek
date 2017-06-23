@@ -25,11 +25,11 @@ namespace WindowsFormsApplication1
                 Value = v;
             }
         }
-        public struct TokensanRegist
+        public struct TokenRegist
             {
                 public string Name;
                 public string Regex;
-                public TokensanRegist(string N, string R)
+                public TokenRegist(string N, string R)
                 {
                     Name = N;
                     Regex = R;
@@ -37,23 +37,25 @@ namespace WindowsFormsApplication1
 
             }
 
-        public class Tokensan {
-            List<TokensanRegist> RegEx = new List<TokensanRegist>();
-            public Tokensan() {
-                RegEx.Add(new TokensanRegist("printT",@"(^print$)"));
-                RegEx.Add(new TokensanRegist("openBracketsT", @"(^\($)"));
-                RegEx.Add(new TokensanRegist("closeBracketsT", @"(^\)$)"));
-                RegEx.Add(new TokensanRegist("varT", @"(^([A-Za-z][A-Za-z0-9]*)$)"));
-                RegEx.Add(new TokensanRegist("arOpT", @"(^([+|\-|*|\/])$)"));
-                RegEx.Add(new TokensanRegist("digitT", @"(^((-?\d+)(\,\d*)?)$)"));
-                RegEx.Add(new TokensanRegist("equalOpT", @"^(=)$"));
-                RegEx.Add(new TokensanRegist("endT", @"(^(;)$)"));
-                RegEx.Add(new TokensanRegist("spaceT", @"(^\s$)"));
+        public class Tokenizator {
+            List<TokenRegist> RegEx = new List<TokenRegist>();
+            public Tokenizator() {
+                RegEx.Add(new TokenRegist("printT",@"(^print$)"));
+                RegEx.Add(new TokenRegist("openBracketsT", @"(^\($)"));
+                RegEx.Add(new TokenRegist("closeBracketsT", @"(^\)$)"));
+                RegEx.Add(new TokenRegist("varT", @"(^([A-Za-z][A-Za-z0-9]*)$)"));
+                RegEx.Add(new TokenRegist("arOpT", @"(^([+|\-|*|\/])$)"));
+                RegEx.Add(new TokenRegist("digitT", @"(^((-?\d+)(\,\d*)?)$)"));
+                RegEx.Add(new TokenRegist("equalOpT", @"^(=)$"));
+                RegEx.Add(new TokenRegist("endT", @"(^(;)$)"));
+                RegEx.Add(new TokenRegist("spaceT", @"(^\s$)"));
+                RegEx.Add(new TokenRegist("Error: unknown element", "[$.`'{}<>]"));
+
             }
             
 
             public string  TokenIsMatch(string progtext) {
-                foreach (TokensanRegist r in RegEx) {
+                foreach (TokenRegist r in RegEx) {
                     if (Regex.IsMatch(progtext, r.Regex)) { return r.Name; break; }
                 }
                 return null;
@@ -90,16 +92,130 @@ namespace WindowsFormsApplication1
             
         }
 
-        public class Kurva {
+        public struct Lex {
+            public string token1;
+            public string token2;
+            public Lex(string token1,string token2) {
+                this.token1 = token1;
+                this.token2 = token2;
+            }
+        }
 
-            public int hmpriority(Token t) {
+        public class Lexer
+        {
+
+            List<Lex> Lexs = new List<Lex>();
+
+            public Lexer()
+            {
+
+                Lexs.Add(new Lex("printT", "openBracketsT"));
+
+                Lexs.Add(new Lex("openBracketsT", "varT"));
+                Lexs.Add(new Lex("openBracketsT", "digitT"));
+                Lexs.Add(new Lex("openBracketsT", "spaceT"));
+
+                Lexs.Add(new Lex("closeBracketsT", "arOpt"));
+                Lexs.Add(new Lex("closeBracketsT", "equalOpT"));
+                Lexs.Add(new Lex("closeBracketsT", "endT"));
+                Lexs.Add(new Lex("closeBracketsT", "spaceT"));
+
+                Lexs.Add(new Lex("varT", "closeBracketsT"));
+                Lexs.Add(new Lex("varT", "arOpT"));
+                Lexs.Add(new Lex("varT", "equalOpT"));
+                Lexs.Add(new Lex("varT", "endT"));
+                Lexs.Add(new Lex("varT", "spaceT"));
+
+                Lexs.Add(new Lex("arOpT", "openBracketsT"));
+                Lexs.Add(new Lex("arOpT", "varT"));
+                Lexs.Add(new Lex("arOpT", "digitT"));
+                Lexs.Add(new Lex("arOpT", "spaceT"));
+
+                Lexs.Add(new Lex("digitT", "closeBracketsT"));
+                Lexs.Add(new Lex("digitT", "arOpT"));
+                Lexs.Add(new Lex("digitT", "endT"));
+                Lexs.Add(new Lex("digit", "SpaceT"));
+
+                Lexs.Add(new Lex("equalOpT", "openBracketsT"));
+                Lexs.Add(new Lex("equalOpT", "varT"));
+                Lexs.Add(new Lex("equalOpT", "digitT"));
+                Lexs.Add(new Lex("equalOpT", "SpaceT"));
+
+                Lexs.Add(new Lex("endT", "printT"));
+                Lexs.Add(new Lex("end", "openBracketsT"));
+                Lexs.Add(new Lex("end", "varT"));
+                Lexs.Add(new Lex("end", "spaceT"));
+
+                Lexs.Add(new Lex("spaceT", "printT"));
+                Lexs.Add(new Lex("spaceT", "openBracketsT"));
+                Lexs.Add(new Lex("spaceT", "closeBracketsT"));
+                Lexs.Add(new Lex("spaceT", "varT"));
+                Lexs.Add(new Lex("spaceT", "arOpT"));
+                Lexs.Add(new Lex("spaceT", "digitT"));
+                Lexs.Add(new Lex("spaceT", "equalOpT"));
+                Lexs.Add(new Lex("spaceT", "endT"));
+            }
+
+            private bool IsRightLex(Token t1, Token t2)
+            {
+
+                foreach (Lex l in Lexs)
+                {
+                    if ((t1.Name == l.token1) && (t2.Name == l.token2))
+                    {
+                        return true;
+
+                    }
+                }
+                return false;
+
+            }
+
+            public bool Lexe(List<Token> Tokens)
+            {
+                if (Tokens == null) { return true; }
+                if (Tokens[0].Name == "Error: unknown element") { return false; }
+                for (int i = 0; i <= Tokens.Count - 2; i++)
+                {
+                    if (IsRightLex(Tokens[i], Tokens[i + 1]) == false)
+                        return false;
+
+                }
+                return true;
+
+            }
+
+            public bool BracketsRight(List<Token> Tokens)
+            {
+                int openBracketsT = 0, closeBracketsT = 0;
+                foreach (Token tk in Tokens)
+                {
+                    switch (tk.Name)
+                    {
+                        case "openBracketsT": { openBracketsT++; break; }
+                        case "closeBracketsT": { closeBracketsT++; break; }
+                        default: break;
+                    }
+                }
+
+                if (openBracketsT == closeBracketsT)  return true;
+                else return false;
+
+            }
+
+
+        }
+
+        public class Kurva {                                       
+
+            public int hmpriority(Token t) {                               
                 if (t.Value == "/" || t.Value == "*") return 10;
                 if (t.Value == "+" || t.Value == "-") return 9;
                 if (t.Value == "="||t.Value== "print") return 8;
                 else return 0;
             }
 
-            public List<Token> getpolsk (List<Token> nepolsk) {
+            public List<Token> getpolsk (List<Token> nepolsk) {            
                 bool toprint = false;
                 List<Token> alreadyPolsk = new List<Token>();
                 Stack<Token> stack = new Stack<Token>();
@@ -140,11 +256,11 @@ namespace WindowsFormsApplication1
             }
         }
 
-        public struct VarHol {
+        public struct VrHol {                          
             public double value;
             public string name;
 
-           public VarHol(string name, double value) {
+           public VrHol(string name, double value) {
                 this.name = name;
                 this.value = value;
             }
@@ -152,11 +268,11 @@ namespace WindowsFormsApplication1
 
         public class Machine
         {
-            private Stack<VarHol> stack = new Stack<VarHol>();
-            private List<VarHol> vars = new List<VarHol>();
+            private Stack<VrHol> stack = new Stack<VrHol>();
+            private List<VrHol> vars = new List<VrHol>();
             bool IsExist(string var)
             {
-                foreach (VarHol v in vars)
+                foreach (VrHol v in vars)
                 {
                     if (v.name == var) return true;
 
@@ -164,18 +280,18 @@ namespace WindowsFormsApplication1
                 return false;
             }
 
-            double GetVarHolByName(string name)
+            double GetVrHolByName(string name)
             {
-                foreach (VarHol var in vars)
+                foreach (VrHol var in vars)
                 {
                     if (var.name == name) return var.value;
                 }
                 return 0f;
             }
 
-            int GetVarHolByNameIndex(string name)
+            int GetVrHolByNameIndex(string name)
             {
-                for (int i = 0; i < vars.Count - 1; i++)
+                for (int i = 0; i < vars.Count; i++)
                 {
                     if (vars[i].name == name) return i;
                 }
@@ -196,18 +312,19 @@ namespace WindowsFormsApplication1
                             {
                                 if (!IsExist(token.Value))
                                 {
-                                    stack.Push(new VarHol(token.Value, 0f));
-                                    vars.Add(new VarHol(token.Value, 0f));
+                                    stack.Push(new VrHol(token.Value, 0f));
+                                    vars.Add(new VrHol(token.Value, 0f));
                                 }
                                 else
                                 {
-                                    stack.Push(new VarHol(token.Value, GetVarHolByName(token.Value)));
+                                    stack.Push(new VrHol(token.Value, GetVrHolByName(token.Value)));
+                                    
 
                                 }
                             }
                             break;
                         case "digitT":
-                            stack.Push(new VarHol("", Convert.ToDouble(token.Value)));
+                            stack.Push(new VrHol("", Convert.ToDouble(token.Value)));
                             break;
 
                         case "arOpT":
@@ -216,19 +333,19 @@ namespace WindowsFormsApplication1
                                 double op2 = stack.Pop().value;
                                 if (token.Value == "+")
                                 {
-                                    stack.Push(new VarHol("", (op1 + op2)));
+                                    stack.Push(new VrHol("", (op1 + op2)));
                                 }
                                 else if (token.Value == "-")
                                 {
-                                    stack.Push(new VarHol("", (op1 - op2)));
+                                    stack.Push(new VrHol("", (op2 - op1)));
                                 }
                                 else if (token.Value == "*")
                                 {
-                                    stack.Push(new VarHol("", (op1 * op2)));
+                                    stack.Push(new VrHol("", (op1 * op2)));
                                 }
                                 else if (token.Value == "/")
                                 {
-                                    stack.Push(new VarHol("", (op1 / op2)));
+                                    stack.Push(new VrHol("", (op1 / op2)));
                                 }
                             }
                             break;
@@ -236,8 +353,8 @@ namespace WindowsFormsApplication1
                             {
                                 double opb = stack.Pop().value;
                                 string opa = stack.Pop().name;
-                                int a = (GetVarHolByNameIndex(opa));
-                                vars[a] = new VarHol("", opb);
+                                int a = (GetVrHolByNameIndex(opa));
+                                vars[a] = new VrHol("", opb);
                             }
                             break;
 
@@ -258,33 +375,43 @@ namespace WindowsFormsApplication1
 
         private void MagicBuild_Load(object sender, EventArgs e)
         {
-
+           
         }
 
-        private void Ckick(object sender, EventArgs e)
+
+        private void Click(object sender, EventArgs e)
         {
 
-            Tokensan tokensan = new Tokensan();
+            Tokenizator tokenezator = new Tokenizator();
+            Lexer lexer = new Lexer();
             Tokens.Text = "";
             Output.Text = "";
-            Kurva_perdole.Text = "";
-            List <Token> tks = tokensan.getTokens(ProgrammText.Text);
+            Perdole.Text = "";
+            List <Token> tks = tokenezator.getTokens(ProgrammText.Text);
 
             foreach (Token t in tks){
                 Tokens.Text += t.Name + ", ";
             }
 
-            Kurva Kurva = new Kurva();
-            List<Token> polis = Kurva.getpolsk(tks);
+            if (lexer.BracketsRight(tks)){
 
-            foreach (Token t in polis)
-            {
-                Kurva_perdole.Text += t.Value+ ", ";
+                if (lexer.Lexe(tks))
+                {
+
+                    Kurva Kurva = new Kurva();
+                    List<Token> polis = Kurva.getpolsk(tks);
+
+                    foreach (Token t in polis)
+                    {
+                        Perdole.Text += t.Value + ", ";
+                    }
+
+                    Machine machine = new Machine();
+                    Output.Text = machine.vmachine(polis);
+                }
+                else Output.Text = "There is some trouble's whith UR sinthax. PLS check it";
             }
-
-            Machine machine = new Machine();
-            Output.Text=machine.vmachine(polis);
-
+            else Output.Text = "U have not equal amount of brackets";
         }
     }
 }

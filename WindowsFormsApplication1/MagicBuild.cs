@@ -37,9 +37,9 @@ namespace WindowsFormsApplication1
 
             }
 
-        public class Tokenizator {
+        public class Tokensun {
             List<TokenRegist> RegEx = new List<TokenRegist>();
-            public Tokenizator() {
+            public Tokensun() {
                 RegEx.Add(new TokenRegist("printT",@"(^print$)"));
                 RegEx.Add(new TokenRegist("openBracketsT", @"(^\($)"));
                 RegEx.Add(new TokenRegist("closeBracketsT", @"(^\)$)"));
@@ -382,7 +382,7 @@ namespace WindowsFormsApplication1
         private void Click(object sender, EventArgs e)
         {
 
-            Tokenizator tokenezator = new Tokenizator();
+            Tokensun tokenezator = new Tokensun();
             Lexer lexer = new Lexer();
             Tokens.Text = "";
             Output.Text = "";
